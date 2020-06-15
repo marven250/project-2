@@ -40,8 +40,8 @@ public class Writer implements Serializable {
   private String email;
   @Column(name = "phonenumber")
   private String phone;
-  @Column(name = "permission")
-  private Integer permission;
+  @Column(name = "permissions")
+  private Integer permissions;
 
   public Writer() {
 	  
@@ -58,7 +58,7 @@ public Writer(Integer writerid, String username, String password, String firstna
 	this.lastname = lastname;
 	this.email = email;
 	this.phone = phone;
-	this.permission = permission;
+	this.permissions = permission;
 }
 
 
@@ -133,12 +133,12 @@ public void setPhone(String phone) {
 
 
 public Integer getPermission() {
-	return permission;
+	return permissions;
 }
 
 
 public void setPermission(Integer permission) {
-	this.permission = permission;
+	this.permissions = permission;
 }
 
 
@@ -146,7 +146,7 @@ public void setPermission(Integer permission) {
 public String toString() {
 	return "Writer [writerid=" + writerid + ", username=" + username + ", password=" + password + ", firstname="
 			+ firstname + ", lastname=" + lastname + ", email=" + email + ", phone=" + phone + ", permission="
-			+ permission + "]";
+			+ permissions + "]";
 }
   
   
