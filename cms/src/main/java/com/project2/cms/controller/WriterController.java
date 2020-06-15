@@ -162,7 +162,7 @@ public class WriterController {
     @PostMapping("/logout")
     public String info(HttpSession session) {
     	String xxx = session.getAttribute("isLoggedIn").toString();
-//         session.setAttribute("isLoggedIn", false);
+         session.setAttribute("isLoggedIn", false);
          return xxx;
 
     }
