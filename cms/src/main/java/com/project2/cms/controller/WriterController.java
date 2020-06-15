@@ -41,9 +41,12 @@ public class WriterController {
     private WriterRepository writerRepository;
 
     @GetMapping("/writers")
-    public List<Writer> getAllEmployees(HttpSession session) {
+    public List<Writer> getAllWriters(HttpSession session) {
     	if (session.getAttribute("isLoggedIn") != null
     	        && (Boolean) session.getAttribute("isLoggedIn")) {
+    		if((Integer)session.getAttribute("writerpermission") != 1) {
+    			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+    			}
         return writerRepository.findAll();
     	}else{
     	      throw new ResponseStatusException(HttpStatus.FORBIDDEN);
@@ -51,12 +54,16 @@ public class WriterController {
     }
 
     @GetMapping("/writers/{id}")
-    public ResponseEntity<Writer> getEmployeeById(@PathVariable(value = "id") Integer writerid,HttpSession session)
+    public ResponseEntity<Writer> getWriterById(@PathVariable(value = "id") Integer writerid,HttpSession session)
         throws ResourceNotFoundException {
     	if (session.getAttribute("isLoggedIn") != null
     	        && (Boolean) session.getAttribute("isLoggedIn")) {
-    	 Writer writer = writerRepository.findById(writerid).orElseThrow(() -> new ResourceNotFoundException("writer not found for this id :: " + writerid));
-        return ResponseEntity.ok().body(writer);
+    		if((Integer)session.getAttribute("writerpermission") == 1 || (Integer)session.getAttribute("writerid") == writerid ) {
+    			Writer writer = writerRepository.findById(writerid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    	        return ResponseEntity.ok().body(writer);
+    			}
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+
     	}else{
   	      throw new ResponseStatusException(HttpStatus.FORBIDDEN);
       }
@@ -64,58 +71,71 @@ public class WriterController {
     
     
     @PostMapping("/writers")
-    public Writer createEmployee(@Validated @RequestBody Writer writer, HttpSession session) {
+    public Writer createWriter(@Validated @RequestBody Writer writer, HttpSession session) {
     	if (session.getAttribute("isLoggedIn") != null
     	        && (Boolean) session.getAttribute("isLoggedIn")) {
+    		if((Integer)session.getAttribute("writerpermission") != 1) {
+    			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+    			}
         return writerRepository.save(writer);
     	}else{
     	      throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
     }
+    
+    //update writers (admin && the writers for his own)
 
     @PutMapping("/writers/{id}")
     public ResponseEntity<Writer> updateWriter(@PathVariable(value = "id") Integer writerid,
          @Validated @RequestBody Writer writerDetails,  HttpSession session) throws ResourceNotFoundException {
     	if (session.getAttribute("isLoggedIn") != null
     	        && (Boolean) session.getAttribute("isLoggedIn")) {
-    	Writer writer = writerRepository.findById(writerid)
-        .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + writerid));
+    		if((Integer)session.getAttribute("writerpermission") == 1 || (Integer)session.getAttribute("writerid") == writerid) {
+    			Writer writer = writerRepository.findById(writerid)
+    			        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-       if(writerDetails.getUsername().toString().trim() != "" && !(writerDetails.getUsername().toString().trim().isEmpty())) { 
-    	   writer.setUsername(writerDetails.getUsername());}
-       if(writerDetails.getPassword().toString().trim() != "" && !(writerDetails.getPassword().toString().trim().isEmpty())) { 
-    	   writer.setPassword(writerDetails.getPassword());}
-       if(writerDetails.getFirstname().toString().trim() != "" && !(writerDetails.getFirstname().toString().trim().isEmpty())) { 
-    	   writer.setFirstname(writerDetails.getFirstname());}
-       if(writerDetails.getLastname().toString().trim() != "" && !(writerDetails.getLastname().toString().trim().isEmpty())) { 
-    	   writer.setLastname(writerDetails.getLastname());}
-       if(writerDetails.getEmail().toString().trim() != "" && !(writerDetails.getEmail().toString().trim().isEmpty())) { 
-    	   writer.setEmail(writerDetails.getEmail());}
-       if(writerDetails.getPhone().toString().trim() != "" && !(writerDetails.getPhone().toString().trim().isEmpty())) { 
-    	   writer.setPhone(writerDetails.getPhone());}
-       String string = writerDetails.getPermission().toString();
-       try {
-           Double x = Double.parseDouble(string);
-           writer.setPermission(writerDetails.getPermission());
-       } catch (NumberFormatException e) {
-           e.getMessage();
-       }
-       if(writerDetails.getPermission().toString().trim() != "" && !(writerDetails.getPermission().toString().trim().isEmpty())) { 
-    	   writer.setPermission(writerDetails.getPermission());}
-       
-       
-       final Writer updatedWriter = writerRepository.save(writer);
-        return ResponseEntity.ok(updatedWriter);
+    			       if(writerDetails.getUsername().toString().trim() != "" && !(writerDetails.getUsername().toString().trim().isEmpty())) { 
+    			    	   writer.setUsername(writerDetails.getUsername());}
+    			       if(writerDetails.getPassword().toString().trim() != "" && !(writerDetails.getPassword().toString().trim().isEmpty())) { 
+    			    	   writer.setPassword(writerDetails.getPassword());}
+    			       if(writerDetails.getFirstname().toString().trim() != "" && !(writerDetails.getFirstname().toString().trim().isEmpty())) { 
+    			    	   writer.setFirstname(writerDetails.getFirstname());}
+    			       if(writerDetails.getLastname().toString().trim() != "" && !(writerDetails.getLastname().toString().trim().isEmpty())) { 
+    			    	   writer.setLastname(writerDetails.getLastname());}
+    			       if(writerDetails.getEmail().toString().trim() != "" && !(writerDetails.getEmail().toString().trim().isEmpty())) { 
+    			    	   writer.setEmail(writerDetails.getEmail());}
+    			       if(writerDetails.getPhone().toString().trim() != "" && !(writerDetails.getPhone().toString().trim().isEmpty())) { 
+    			    	   writer.setPhone(writerDetails.getPhone());}
+    			       String string = writerDetails.getPermission().toString();
+    			       try {
+    			           Double x = Double.parseDouble(string);
+    			           writer.setPermission(writerDetails.getPermission());
+    			       } catch (NumberFormatException e) {
+    			           e.getMessage();
+    			       }
+    			       if(writerDetails.getPermission().toString().trim() != "" && !(writerDetails.getPermission().toString().trim().isEmpty())) { 
+    			    	   writer.setPermission(writerDetails.getPermission());}
+    			       
+    			       
+    			       final Writer updatedWriter = writerRepository.save(writer);
+    			        return ResponseEntity.ok(updatedWriter);
+    			}
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+
+    	
     	}else{
   	      throw new ResponseStatusException(HttpStatus.FORBIDDEN);
       }
     }
 
     @DeleteMapping("/writers/{id}")
-    public Map<String, Boolean> deleteEmployee(@PathVariable(value = "id") Integer writerid, HttpSession session)
+    public Map<String, Boolean> deleteWriter(@PathVariable(value = "id") Integer writerid, HttpSession session)
          throws ResourceNotFoundException {
     	if (session.getAttribute("isLoggedIn") != null
     	        && (Boolean) session.getAttribute("isLoggedIn")) {
+    		if((Integer)session.getAttribute("writerpermission") != 1) {
+    			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+    			}
     	Writer writer = writerRepository.findById(writerid)
        .orElseThrow(() -> new ResourceNotFoundException("Writer not found for this id :: " + writerid));
 
@@ -127,56 +147,31 @@ public class WriterController {
     	      throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
     }
-    
-    // To store values on a session similar to express session, just add HttpSession as a parameter to
-    // your Controller method
-    // Then use methods on the session to set/get attributes
+
     @PostMapping("/login")
     public Writer attemptLogin(@RequestBody Credentials creds, HttpSession session) {
       Boolean isLoggedIn =writerService.checkCredentials(creds.getUsername(), creds.getPassword());
+      List<Writer> store = writerRepository.checkUsernamePassword(creds.getUsername(), creds.getPassword());
 
       session.setAttribute("isLoggedIn", isLoggedIn);
       
-      List<Writer> store = writerRepository.checkUsernamePassword(creds.getUsername(), creds.getPassword());
+      session.setAttribute("writerpermission", store.get(0).getPermission());
+      session.setAttribute("writerid", store.get(0).getWriterid());
+
+      
       if(isLoggedIn == false) {
 	      throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
       }
-      //cookies
-      
-      Cookie permission = new Cookie("permission", store.get(0).getPermission().toString());
-      permission.setMaxAge(7 * 24 * 60 * 60);
-      permission.setSecure(true);
-      permission.setHttpOnly(true);
-      permission.setPath("/"); 
-      Cookie id = new Cookie("id", store.get(0).getWriterid().toString());
-      id.setMaxAge(7 * 24 * 60 * 60);
-      id.setSecure(true);
-      id.setHttpOnly(true);
-      id.setPath("/"); 
-
-//      response.addCookie(permission);
-//      response.addCookie(id);
-
       return store.get(0);
     }
-    @PostMapping("/logout")
+    
+    @GetMapping("/logout")
     public String info(HttpSession session) {
     	String xxx = session.getAttribute("isLoggedIn").toString();
-//         session.setAttribute("isLoggedIn", false);
+         session.setAttribute("isLoggedIn", false);
          return xxx;
 
     }
     
-    
-
-@GetMapping("/checkCookies")
-public String readAllCookies(HttpServletRequest request) {
-    Cookie[] cookies = request.getCookies();
-    if (cookies != null) {
-        return Arrays.stream(cookies)
-                .map(c -> c.getName() + "=" + c.getValue()).collect(Collectors.joining(", "));
-    }
-    return "No cookies";
-}
     
 }
