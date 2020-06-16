@@ -20,7 +20,7 @@ public class Message {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   @JoinColumn(name = "sender")
-  @OneToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.EAGER)
   private Writer sender;
   @Column(name = "message_text")
   private String messageText;
