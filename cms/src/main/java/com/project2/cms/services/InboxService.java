@@ -14,6 +14,7 @@ public class InboxService {
   
   public Inbox getInboxById(Integer id) {
     Optional<Inbox> inbox = inboxRepository.findById(id);
-    return inbox.get();
+    Inbox finalInbox = inbox.get();
+    return finalInbox;
   }
 }

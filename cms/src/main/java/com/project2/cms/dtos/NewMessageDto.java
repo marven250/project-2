@@ -46,6 +46,20 @@ public class NewMessageDto {
   public void setInboxId(Integer inboxId) {
     this.inboxId = inboxId;
   }
+  
+  public NewMessageDto() {
+    super();
+
+  }
+  
+  public NewMessageDto(@NotNull Integer senderId, @NotNull String messageText,
+      @NotNull String messageStatus, @NotNull Integer inboxId) {
+    super();
+    this.senderId = senderId;
+    this.messageText = messageText;
+    this.messageStatus = messageStatus;
+    this.inboxId = inboxId;
+  }
 
 
   
