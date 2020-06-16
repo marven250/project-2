@@ -1,0 +1,33 @@
+package com.project2.cms.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name= "POST_TABLE")
+public class Post {
+
+		@Id
+		@GeneratedValue
+		private int id;
+		private int author;
+		private String postTitle;
+		private String postDescription;
+		private String dateSubmitted;
+		private String datePublished;
+		private int postType;
+		private int postField;
+		private String keyWords;
+		private int resolver;
+		private int status;	
+}

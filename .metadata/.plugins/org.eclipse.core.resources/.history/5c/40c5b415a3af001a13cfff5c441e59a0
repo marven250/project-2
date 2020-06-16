@@ -1,0 +1,27 @@
+package com.project2.cms.model;
+
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+public class Post {
+
+		@Id
+		@Table(name= "post_table");
+	
+		private int id;
+		private int author;
+		private String postTitle;
+		private String postDescription;
+		private String dateSubmitted;
+		private String datePublished;
+		private int postType;
+		private int postField;
+		private String keyWords;
+		private int resolver;
+		private int status;
+		
+		
+		
+		
+		
+}

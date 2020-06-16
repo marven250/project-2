@@ -1,0 +1,100 @@
+package com.project2.cms.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name= "POST_TABLE")
+public class Post {
+	
+	
+		public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getPostTitle() {
+		return postTitle;
+	}
+	public void setPostTitle(String postTitle) {
+		this.postTitle = postTitle;
+	}
+	public String getPostDescription() {
+		return postDescription;
+	}
+	public void setPostDescription(String postDescription) {
+		this.postDescription = postDescription;
+	}
+	public String getPostType() {
+		return postType;
+	}
+	public void setPostType(String postType) {
+		this.postType = postType;
+	}
+	public String getPostField() {
+		return postField;
+	}
+	public void setPostField(String postField) {
+		this.postField = postField;
+	}
+	public String getKeyWords() {
+		return keyWords;
+	}
+	public void setKeyWords(String keyWords) {
+		this.keyWords = keyWords;
+	}
+	public int getResolver() {
+		return resolver;
+	}
+	public void setResolver(int resolver) {
+		this.resolver = resolver;
+	}
+		public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+		public int getAuthor() {
+		return author;
+	}
+	public void setAuthor(int author) {
+		this.author = author;
+	}
+	public String getDateSubmitted() {
+		return dateSubmitted;
+	}
+	public void setDateSubmitted(String dateSubmitted) {
+		this.dateSubmitted = dateSubmitted;
+	}
+	public String getDatePublished() {
+		return datePublished;
+	}
+	public void setDatePublished(String datePublished) {
+		this.datePublished = datePublished;
+	}
+		@Id
+		@GeneratedValue
+		private int id;
+		private int author;
+		private String postTitle;
+		private String postDescription;
+		private String dateSubmitted;
+		private String datePublished;
+		private String postType;
+		private String postField;
+		private String keyWords;
+		private int resolver;
+		private String status;	
+}

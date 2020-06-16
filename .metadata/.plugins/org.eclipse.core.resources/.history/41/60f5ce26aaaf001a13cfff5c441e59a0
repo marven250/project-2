@@ -1,0 +1,18 @@
+package com.project2.cms.services;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.project2.cms.model.Post;
+import com.project2.cms.repository.PostRepository;
+
+@Service
+public class PostService {
+	@Autowired
+	private PostRepository postRepository;
+	
+	public Post savePost(Post post) {
+		return postRepository.save(post);
+	}
+
+}
