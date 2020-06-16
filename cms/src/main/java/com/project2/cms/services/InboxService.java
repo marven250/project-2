@@ -17,4 +17,10 @@ public class InboxService {
     Inbox finalInbox = inbox.get();
     return finalInbox;
   }
+  
+  public Inbox createInbox(Inbox inbox) {
+    inbox.setId(0);
+    return inboxRepository.save(inbox);
+    
+  }
 }
