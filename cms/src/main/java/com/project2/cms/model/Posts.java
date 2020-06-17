@@ -27,7 +27,7 @@ public class Posts {
 	private String postTitle;
 	  @Column(name = "postdescription")
 	private String postDescription;
-	  @Column(name = "postText")
+	  @Column(name = "posttext")
 	private String postText;
 	  @Column(name = "datesubmitted")
 	private Date dateSubmitted;
